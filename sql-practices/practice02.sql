@@ -30,6 +30,37 @@ from employees;
 select date_format(min(hire_date),'%Y년 %m월 %d일')
 from employees;
 
+select *,datediff(date_format(to_date,'%Y%m%d'),date_format(from_date,'%Y%m%d'))
+from salaries
+group by emp_no
+order by datediff(date_format(to_date,'%Y%m%d'),date_format(from_date,'%Y%m%d')) desc;
+
+select date_format(from_date,'%Y%m')
+from salaries
+order by emp_no;
+
+update salaries
+set to_date = curdate()
+where to_date = '9999-01-01';
+
+
+select *,datediff(max(to_date),min(from_date)) as '근속일'
+from salaries
+group by emp_no
+order by 근속일 desc;
+
+select date_format(from_date,'%Y년 %m월 %d일')
+from salaries
+group by emp_no
+order by datediff(max(to_date),min(from_date)) desc
+limit 1;
+
+
+
+
+
+
+
 
 
 
@@ -52,3 +83,5 @@ from employees;
 select max(year(now()) - left(birth_date,4)) as '최연장자',min(year(now()) - left(birth_date,4)) as '최연소자' 
 from employees;
 
+select period_diff(date_format(curdate(),'%Y%m'),date_format(min(birth_date),'%Y%m'))/12 as '최연장자',min(period_diff(date_format(curdate(),'%Y%m'),date_format(birth_date,'%Y%m')))/12 as '최연소자'	
+from employees;
