@@ -27,12 +27,10 @@ select max(period_diff(date_format(curdate(),'%Y%m'),date_format(hire_date,'%Y%m
 from employees;
 
 
-select date_format(hire_date,'%Y년 %m월 %d일')
-from employees
-order by max(period_diff(date_format(curdate(),'%Y%m'),date_format(hire_date,'%Y%m'))) desc;
-
 select date_format(min(hire_date),'%Y년 %m월 %d일')
 from employees;
+
+
 
 
 -- 문제4.
@@ -54,16 +52,3 @@ from employees;
 select max(year(now()) - left(birth_date,4)) as '최연장자',min(year(now()) - left(birth_date,4)) as '최연소자' 
 from employees;
 
-select date_format(curdate(),'%y%m');
-
-select date_format(birth_date,'%y%m')
-from employees;
-
-select date_format(hire_date,'%y%m')
-from employees;
-
-select period_diff(date_format(curdate(),'%y%m'),date_format(hire_date,'%y%m'))
-from employees;
-
-select period_diff(date_format(curdate(),'%y%m'),date_format(birth_date,'%y%m'))
-from employees;
