@@ -44,23 +44,22 @@ set to_date = curdate()
 where to_date = '9999-01-01';
 
 
+
+
+select *
+from salaries;
+
+
 select *,datediff(max(to_date),min(from_date)) as '근속일'
 from salaries
 group by emp_no
 order by 근속일 desc;
 
-select date_format(from_date,'%Y년 %m월 %d일')
+select date_format(from_date,'%Y년 %m월 %d일') as '입사일'
 from salaries
 group by emp_no
 order by datediff(max(to_date),min(from_date)) desc
 limit 1;
-
-
-
-
-
-
-
 
 
 
