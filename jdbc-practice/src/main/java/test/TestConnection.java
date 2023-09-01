@@ -13,8 +13,8 @@ public class TestConnection {
 			Class.forName("org.mariadb.jdbc.Driver");
 			
 			//2. 연결하기
-			String url = "jdbc:mariadb://192.168.64.2:3307/webdb?charset=utf8";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
+			String url = "jdbc:mariadb://localhost:3306/employees?charset=utf8";
+			conn = DriverManager.getConnection(url, "root", "P@ssw0rD1");
 			
 			System.out.println("연결성공!");
 		} catch (ClassNotFoundException e) {
