@@ -2,44 +2,44 @@ package test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-public class DeleteTest01 {
+public class DeleteTest02 {
 
 	public static void main(String[] args) {
-		boolean result = deleteDepartmentByNo(1L);
-		System.out.println(result? "성공":"실패");
-
+		boolean result = deleteDepatmentByNo(2L);
+		System.out.println(result ? "성공" : "실패");
 	}
 
-	private static boolean deleteDepartmentByNo(long no) {
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		
+	private static boolean deleteDepatmentByNo(long no) {
 		boolean result = false;
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
 		try {
 			//1. JDBC Driver Class 로딩
 			Class.forName("org.mariadb.jdbc.Driver");
 			
 			//2. 연결하기
-			String url = "jdbc:mariadb://192.168.64.2:3307/webdb?charset=utf8";
+			String url = "jdbc:mariadb://192.162.64.2:3307/webdb?charset=utf8";
 			conn = DriverManager.getConnection(url, "webdb", "webdb");
 
-			//3. Statement 객체 생성
-			stmt = conn.createStatement();
-			
-			//4. SQL 실행
+			//3. SQL 준비
 			String sql =
 					" delete" +
 				    "   from dept" +
-					"  where no=" + no;
-				
-				int count = stmt.executeUpdate(sql);
+					"  where no=?";
+			pstmt = conn.prepareStatement(sql);
 			
-			//5. 결과 처리
+			//4. binding
+			pstmt.setLong(1, no);
+			
+			//5. SQL 실행
+			int count = pstmt.executeUpdate();
+			
+			//6. 결과 처리
 			result = count == 1;
 			
 		} catch (ClassNotFoundException e) {
@@ -48,12 +48,9 @@ public class DeleteTest01 {
 			System.out.println("error:" + e);
 		} finally {
 			try {
-				// 6. 자원정리
-				if(rs != null) {
-					rs.close();
-				}
-				if(stmt != null) {
-					stmt.close();
+				// 7. 자원정리
+				if(pstmt != null) {
+					pstmt.close();
 				}
 				if(conn != null) {
 					conn.close();
