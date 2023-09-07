@@ -11,7 +11,7 @@ public class BookDaoTest {
 		BookVo vo = new BookVo();
 		vo.setPrice(3000);
 		vo.setTitle("dfjkasj");
-		vo.setCategory_no(1);
+		vo.setCategory_no(1L);
 		insertTest(vo);
 		findAll();
 
