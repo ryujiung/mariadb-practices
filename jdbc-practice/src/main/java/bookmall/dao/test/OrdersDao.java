@@ -7,24 +7,31 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import bookmall.vo.BookVo;
 
+import bookmall.vo.CartVo;
+import bookmall.vo.MemberVo;
+import bookmall.vo.OrdersBookVo;
+import bookmall.vo.OrdersVo;
 
-public class BookDao {
+public class OrdersDao {
 
-	public void insert(BookVo vo) {
+	public void insertOrders(OrdersVo vo) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
 		try {
 			conn = getConnection();
 			
-			String sql = "insert into book values(null, ?, ?, ?)";
+			String sql = "insert into orders (name,email,address,ordernumber,member_no,total_price) values(?,?,?,?,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, vo.getTitle());
-			pstmt.setInt(2, vo.getPrice());
-			pstmt.setInt(3, vo.getCategory_no());
+			pstmt.setString(1, vo.getName());
+			pstmt.setString(2, vo.getEmail());
+			pstmt.setString(3, vo.getAddress());
+			pstmt.setString(4, vo.getOrdernumber());
+			pstmt.setLong(5, vo.getMember_no());
+			pstmt.setInt(6, 0);
+			
 			
 			pstmt.executeQuery();
 		} catch (SQLException e) {
@@ -55,23 +62,28 @@ public class BookDao {
 		
 		return conn;
 	}
-	public int findBookPrice(Long no) {
+	public void insertOrdersBook(Long orderNo,Long bookNo,int count) {
+		BookDao bookDao = new BookDao();
+		int price = bookDao.findBookPrice(bookNo);
+		String title = bookDao.findBookTitle(bookNo);
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		int price = 0;
-		try {
-		conn = getConnection();
-		String sql = "select price from book where no = ? ";
-		pstmt = conn.prepareStatement(sql);
 		
-		pstmt.setString(1, Long.toString(no));
-		rs = pstmt.executeQuery();
-		while(rs.next()) {
-			price = rs.getInt("price");
+		try {
+			conn = getConnection();
 			
-		}
-		}catch (SQLException e) {
+			String sql = "insert into orders (title,count,price,orders_no,book_no) values(?,?,?,?,?)";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1,title);
+			pstmt.setInt(2, count);
+			pstmt.setInt(3,price*count);
+			pstmt.setLong(4,orderNo);
+			pstmt.setLong(5, bookNo);
+			
+			
+			pstmt.executeQuery();
+		} catch (SQLException e) {
 			System.out.println("error:" + e);
 		} finally {
 			try {
@@ -85,42 +97,9 @@ public class BookDao {
 				e.printStackTrace();
 			}
 		}
-		
 	}
-	public String findBookTitle(Long no) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		String name = null;
-		try {
-		conn = getConnection();
-		String sql = "select title from book where no = ? ";
-		pstmt = conn.prepareStatement(sql);
-		
-		pstmt.setString(1, Long.toString(no));
-		rs = pstmt.executeQuery();
-		while(rs.next()) {
-			name = rs.getString("title");
-			
-		}
-		}catch (SQLException e) {
-			System.out.println("error:" + e);
-		} finally {
-			try {
-				if(pstmt != null) {
-					pstmt.close();
-				}
-				if(conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-	}
-	public List<BookVo> findAll() {
-		List<BookVo> result = new ArrayList<>();
+	public List<OrdersVo> findAll() {
+		List<OrdersVo> result = new ArrayList<>();
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -130,7 +109,7 @@ public class BookDao {
 			conn = getConnection();
 
 			//3. SQL 준비
-			String sql = "select no,title, price,category_no from book";
+			String sql = "select no,name,email,total_price,address,member_no,ordernumber from orders";
 			pstmt = conn.prepareStatement(sql);
 			
 			//4. binding
@@ -141,15 +120,22 @@ public class BookDao {
 			//6. 결과 처리
 			while(rs.next()) {
 				Long no = rs.getLong(1);
-				Long category_no = rs.getLong(4);
-				String title = rs.getString(2);
-				int price = rs.getInt(3);
+				String name = rs.getString(2);
+				String email = rs.getString(3);
+				int total_price = rs.getInt(4);
+				String address = rs.getString(5);
+				Long member_no = rs.getLong(6);
+				String ordernumber =rs.getString(7);
 				
-				BookVo vo = new BookVo();
+				OrdersVo vo = new OrdersVo();
 				vo.setNo(no);
-				vo.setCategory_no(category_no);
-				vo.setTitle(title);
-				vo.setPrice(price);
+				vo.setName(name);
+				vo.setEmail(email);
+				vo.setTotal_price(total_price);
+				vo.setAddress(address);
+				vo.setMember_no(member_no);
+				vo.setOrdernumber(ordernumber);
+				
 				
 				result.add(vo);
 			}
@@ -175,5 +161,8 @@ public class BookDao {
 		
 		return result;
 	}
-
+	
+	
+	
+	
 }
