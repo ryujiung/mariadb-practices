@@ -24,7 +24,7 @@ public class BookDao {
 			
 			pstmt.setString(1, vo.getTitle());
 			pstmt.setInt(2, vo.getPrice());
-			pstmt.setInt(3, vo.getCategory_no());
+			pstmt.setLong(3, vo.getCategory_no());
 			
 			pstmt.executeQuery();
 		} catch (SQLException e) {
@@ -85,6 +85,7 @@ public class BookDao {
 				e.printStackTrace();
 			}
 		}
+		return price;
 		
 	}
 	public String findBookTitle(Long no) {
@@ -117,6 +118,7 @@ public class BookDao {
 				e.printStackTrace();
 			}
 		}
+		return name;
 		
 	}
 	public List<BookVo> findAll() {
