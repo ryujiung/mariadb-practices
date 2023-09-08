@@ -20,7 +20,7 @@ public class CartDaoTest {
 	private static void findAll() {
 		List<CartVo> list = new CartDao().findAll();
 		for(CartVo vo : list) {
-			System.out.println("도서 제목: ");
+			System.out.println(vo);
 		}
 		
 		

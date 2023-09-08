@@ -6,6 +6,7 @@ public class MemberVo {
 	private String phone;
 	private String email;
 	private String pw;
+	
 	public Long getNo() {
 		return no;
 	}

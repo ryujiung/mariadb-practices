@@ -7,6 +7,13 @@ public class OrdersBookVo {
 	private String title;
 	private int count;
 	private int price;
+	
+	public OrdersBookVo(Long book_no,String title,int count) {
+		this.book_no = book_no;
+		this.title = title;
+		this.count = count;
+		
+	}
 	public Long getNo() {
 		return no;
 	}

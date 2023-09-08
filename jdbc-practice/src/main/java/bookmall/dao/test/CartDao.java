@@ -24,9 +24,9 @@ public class CartDao {
 			String sql = "insert into cart values(null, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setLong(1, vo.getMember_no());
-			pstmt.setLong(2, vo.getBook_no());
-			pstmt.setInt(3, vo.getCount());
+			pstmt.setInt(1, vo.getCount());
+			pstmt.setLong(2, vo.getMember_no());
+			pstmt.setLong(3, vo.getBook_no());
 			
 			
 			pstmt.executeQuery();
@@ -69,7 +69,7 @@ public class CartDao {
 			conn = getConnection();
 
 			//3. SQL 준비
-			String sql = "select no, member_no,book_no, count from count";
+			String sql = "select no, count,member_no,book_no from cart";
 			pstmt = conn.prepareStatement(sql);
 			
 			//4. binding
@@ -80,9 +80,9 @@ public class CartDao {
 			//6. 결과 처리
 			while(rs.next()) {
 				Long no = rs.getLong(1);
-				Long member_no = rs.getLong(2);
-				Long book_no = rs.getLong(3);
-				int count = rs.getInt(4);
+				Long member_no = rs.getLong(3);
+				Long book_no = rs.getLong(4);
+				int count = rs.getInt(2);
 				
 				CartVo vo = new CartVo();
 				vo.setNo(no);

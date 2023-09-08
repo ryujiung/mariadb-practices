@@ -8,6 +8,15 @@ public class OrdersVo {
 	private int total_price;
 	private String address;
 	private String ordernumber;
+	
+	 public OrdersVo(String name, String email, int total_price, String address, String ordernumber) {
+	        this.name = name;
+	        this.email = email;
+	        this.total_price = total_price;
+	        this.address = address;
+	        this.ordernumber = ordernumber;
+	    }
+
 	public String getOrdernumber() {
 		return ordernumber;
 	}
